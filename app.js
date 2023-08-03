@@ -1,5 +1,5 @@
 const mongoose = require('mongoose')
-mongoose.connect('mongodb://127.0.0.1:27017/Sole_scape_DB')
+mongoose.connect('mongodb+srv://midhunmohan:htHsvhVBtahopBIm@cluster0.b7uevvw.mongodb.net/')
 
 const express = require('express');
 const app = express();
