@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="zxx" class="no-js">
+
+<head>
+    <!-- Mobile Specific Meta -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- Favicon-->
+    <link rel="shortcut icon" href="img/fav.png">
+    <!-- Author Meta -->
+    <meta name="author" content="CodePixar">
+    <!-- Meta Description -->
+    <meta name="description" content="">
+    <!-- Meta Keyword -->
+    <meta name="keywords" content="">
+    <!-- meta character set -->
+    <meta charset="UTF-8">
+    <!-- Site Title -->
+    <title>Karma Shop</title>
+
+    <!--
+            CSS
+            ============================================= -->
+    <link rel="stylesheet" href="../fe/css/linearicons.css">
+    <link rel="stylesheet" href="../fe/css/owl.carousel.css">
+    <link rel="stylesheet" href="../fe/css/font-awesome.min.css">
+    <link rel="stylesheet" href="../fe/css/themify-icons.css">
+    <link rel="stylesheet" href="../fe/css/nice-select.css">
+    <link rel="stylesheet" href="../fe/css/nouislider.min.css">
+    <link rel="stylesheet" href="../fe/css/bootstrap.css">
+    <link rel="stylesheet" href="../fe/css/main.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.1.5/dist/sweetalert2.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.1.5/dist/sweetalert2.min.js"></script>
+</head>
+
+<body>
+
+
+    <%- include('../layouts/adminHeader.ejs') %>
+
+        <form action="/admin/addProduct" enctype="multipart/form-data" method="post">
+
+            <section class="content-main">
+                <div class="row">
+                    <div class="col-6">
+                        <div class="content-header">
+                            <h2 class="content-title">Add New Product</h2>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="card mb-4">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <h6>1. General info</h6>
+                                    </div>
+                                    <div class="col-md-9">
+                                        <div class="mb-4">
+                                            <label class="form-label">Product title</label>
+                                            <input type="text" placeholder="Type here" class="form-control" name="name">
+                                        </div>
+                                        <div class="mb-4">
+                                            <label class="form-label">Description</label>
+                                            <textarea placeholder="Type here" class="form-control" rows="4"
+                                                name="description"></textarea>
+                                        </div>
+                                        <div class="mb-4">
+                                            <label class="form-label">Category name</label>
+                                            <select class="form-select" name="category">
+                                                <% category.forEach(function(category) { %>
+                                                    <option value="<%=category._id%>">
+                                                        <%= category.name %>
+                                                    </option>
+                                                    <% }); %>
+                                            </select>
+                                        </div>
+
+                                    </div> <!-- col.// -->
+                                </div> <!-- row.// -->
+                                <hr class="mb-4 mt-0">
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <h6>2. Pricing</h6>
+                                    </div>
+                                    <div class="col-md-9">
+                                        <div class="mb-4">
+                                            <label class="form-label">Cost in INR</label>
+                                            <input type="text" placeholder="₹00.0" class="form-control" name="price">
+                                        </div>
+                                    </div> <!-- col.// -->
+                                </div> <!-- row.// -->
+
+
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <h6>4. Media</h6>
+                                    </div>
+                                    <div class="col-md-9">
+                                        <div class="mb-4">
+                                            <label class="form-label">Main Image</label>
+                                            <input class="form-control" type="file" name="image1">
+                                        </div>
+                                        <div class="mb-4">
+                                            <label class="form-label">Side View Image</label>
+                                            <input class="form-control" required multiple type="file" name="image2">
+                                        </div>
+                                        <div class="mb-4">
+                                            <label class="form-label">Top View Image</label>
+                                            <input required multiple class="form-control" type="file" name="image3">
+                                        </div>
+                                    </div>
+
+
+
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                </div>
+                <div>
+                    <button class="btn btn-md rounded font-sm hover-up" type="submit">Publich</button>
+                    <p style="margin-top: 10px;">
+                        <%=(typeof message!=='undefined' )?message:""%>
+                    </p>
+                </div>
+            </section> <!-- content-main end// -->
+
+        </form>
+
+
+        <script>
+            // Add an event listener to the form submission
+            document.querySelector('form').addEventListener('submit', function (event) {
+                // Prevent the default form submission behavior
+                event.preventDefault();
+
+                // Get the input values
+                var productTitle = document.getElementById('productTitle').value.trim();
+                var productDescription = document.getElementById('productDescription').value.trim();
+                var productPrice = parseFloat(document.getElementById('productPrice').value.trim());
+
+                // Validate the product title and description
+                if (productTitle.length === 0 || productDescription.length === 0) {
+                    alert('Product title and description cannot be empty.');
+                    return;
+                }
+
+                // Validate the product price
+                if (isNaN(productPrice) || productPrice < 0) {
+                    alert('Product price should be a non-negative number.');
+                    return;
+                }
+
+                // If all validations pass, you can proceed with form submission or further processing
+                // Your code here...
+            });
+        </script>
+
+
+
+        <%- include('../layouts/adminFooter.ejs') %>
+
+
+
+    
+</body>        

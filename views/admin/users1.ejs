@@ -1,0 +1,88 @@
+
+
+<%- include('../layouts/adminHeader.ejs') %>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.min.css">
+<script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
+
+
+
+        <!-- content -->
+
+     <!-- content -->
+
+<div class="table-responsive" style="margin-top: 50px;">
+    <h3>Users List</h3>
+    <br>
+    <table class="table table-hover" id="myTable">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Mobile</th>
+                <th>Status</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% user.forEach((user) => { %>
+            <tr>
+                <td><%= user.fname %> <%= user.lname %></td>
+                <td><%= user.email %></td>
+                <td><%= user.mobile %></td>
+                <% if (user.is_blocked == false) { %>
+                <td><span style="color: green;">Active</span></td>
+                <% } else { %>
+                <td><span style="color: red;">Blocked</span></td>
+                <% } %>
+                <td>
+                    <div class="dropdown">
+                        <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
+                            <i class="bx bx-dots-vertical-rounded"></i>
+                        </button>
+                        <div class="dropdown-menu">
+                          
+                            <a class="dropdown-item" href="/admin/deleteUser?id=<%= user._id %>">
+                                <i class="bx bx-trash me-1"></i> Delete
+                            </a>
+
+                            <% if (user.is_blocked == false) { %> <!-- Check if the user is blocked -->
+                            <a class="dropdown-item" href="/admin/blockUser?id=<%= user._id %>">
+                                <i class="bx bx-trash me-1"></i> Block <!-- Display the "Block" button -->
+                            </a>
+                            <% } else { %> <!-- If the user is not blocked -->
+                            <a class="dropdown-item" href="/admin/unBlockUser?id=<%= user._id %>">
+                                <i class="bx bx-trash me-1"></i> Unblock <!-- Display the "Unblock" button -->
+                            </a>
+                            <% } %>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <% }); %>
+        </tbody>
+    </table>
+</div>
+
+
+<script>
+    $(document).ready(function() {
+    $.noConflict();
+      $('#myTable').DataTable({
+        "paging": true,          // Enable pagination
+        "pageLength": 10,        // Number of rows per page
+        "lengthMenu": [10, 25, 50, 75, 100],  // Dropdown options for rows per page
+
+      });
+    });
+    </script>
+
+         <!-- content -->
+
+
+
+<%- include('../layouts/adminFooter.ejs') %>
+
+
+   
