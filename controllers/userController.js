@@ -8,7 +8,7 @@ const Category = require("../models/categoryModel");
 const Banner = require("../models/bannerModel");
 const { ObjectId } = require("mongodb");
 require('dotenv/config')
-const client = require('twilio')(process.env.TWILIO_SID, process.env.TWILIO_AUTH_TOKEN);
+// const client = require('twilio')(process.env.TWILIO_SID, process.env.TWILIO_AUTH_TOKEN);
 
 
 
@@ -95,11 +95,11 @@ const insertUser = async (req, res) => {
     upperCaseAlphabets: false,
     lowerCaseAlphabets: false,
   });
-  await client.messages.create({
-    body: `Your OTP for Smart Wrist Sign Up is: ${otp}`,
-    from: "+18623226158",
-    to: `${mobileNumber}`,
-  });
+  // await client.messages.create({
+  //   body: `Your OTP for Smart Wrist Sign Up is: ${otp}`,
+  //   from: "+18623226158",
+  //   to: `${mobileNumber}`,
+  // });
   console.log(`Otp is ${otp}`);
   try {
     req.session.otp = otp;
@@ -186,11 +186,11 @@ const resendOTP = async (req, res) => {
 
     req.session.otp = otp;
 
-    await client.messages.create({
-      body: `Your OTP for  Sign Up is: ${otp}`,
-      from: "+18623226158",
-      to: `+91${mobileNumber}`,
-    });
+    // await client.messages.create({
+    //   body: `Your OTP for  Sign Up is: ${otp}`,
+    //   from: "+18623226158",
+    //   to: `+91${mobileNumber}`,
+    // });
     console.log(`Resend Otp is ${otp}`);
 
     res.render("verifyOtp", { message: "OTP resent successfully" });
