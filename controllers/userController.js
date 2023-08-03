@@ -8,7 +8,7 @@ const Category = require("../models/categoryModel");
 const Banner = require("../models/bannerModel");
 const { ObjectId } = require("mongodb");
 require('dotenv/config')
-// const client = require('twilio')(process.env.TWILIO_SID, process.env.TWILIO_AUTH_TOKEN);
+const client = require('twilio')(process.env.TWILIO_SID, process.env.TWILIO_AUTH_TOKEN);
 
 
 
