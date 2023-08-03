@@ -1,7 +1,6 @@
 const couponHelper = require("../helpers/couponHelper");
-const Coupon = require("../models/couponModel");
-const { response } = require("../routes/userRoute");
-const { loginLoad } = require("./userController");
+// const Coupon = require("../models/couponModel");
+// const { loginLoad } = require("./userController");
 
 const verifyCoupon = async (req, res) => {
   try {

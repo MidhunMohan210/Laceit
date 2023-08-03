@@ -294,22 +294,31 @@ const generateRazorpay = async (orderId, total) => {
 
 const crypto = require("crypto");
 const verifyPayment = async (details) => {
-  return new Promise((resolve, reject) => {
-    let hmac = crypto.createHmac("sha256", "MT2XOJGASmLrMYKIxyGftXX9");
+  try {
 
-    const orderID = details.payment.razorpay_order_id;
-    const paymentID = details.payment.razorpay_payment_id;
-    const signature = details.payment.razorpay_signature;
+    return new Promise((resolve, reject) => {
+      let hmac = crypto.createHmac("sha256", "MT2XOJGASmLrMYKIxyGftXX9");
+  
+      const orderID = details.payment.razorpay_order_id;
+      const paymentID = details.payment.razorpay_payment_id;
+      const signature = details.payment.razorpay_signature;
+  
+      hmac.update(orderID + "|" + paymentID);
+      hmac = hmac.digest("hex");
+      console.log("here", hmac);
+      if (hmac == signature) {
+        resolve();
+      } else {
+        reject();
+      }
+    });
+    
+  } catch (error) {
 
-    hmac.update(orderID + "|" + paymentID);
-    hmac = hmac.digest("hex");
-    console.log("here", hmac);
-    if (hmac == signature) {
-      resolve();
-    } else {
-      reject();
-    }
-  });
+    console.log(error.message,'verifyPayment');
+    
+  }
+
 };
 
 const changePaymentStatus = async (orderId,user) => {

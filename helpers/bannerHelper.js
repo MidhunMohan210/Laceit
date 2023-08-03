@@ -3,25 +3,45 @@ const mongoose = require('mongoose')
 
 
 const addBannerHelper=async(texts, Image) => {
-    return new Promise(async (resolve, reject) => {
-        const banner = new Banner({
-            title: texts.title,
-            subTitle:texts.subTitle,
-            price:texts.price,
-            link: texts.link,
-            image: Image,
+    try {
+
+        return new Promise(async (resolve, reject) => {
+            const banner = new Banner({
+                title: texts.title,
+                subTitle:texts.subTitle,
+                price:texts.price,
+                link: texts.link,
+                image: Image,
+            });
+            await banner.save().then((response) => {
+                resolve(response);
+            });
         });
-        await banner.save().then((response) => {
-            resolve(response);
-        });
-    });
+        
+    } catch (error) {
+        console.log(error.message,'addBannerHelper');
+        
+    }
+
 }
 const bannerListHelper = async()=>{
-    return new Promise(async (resolve, reject) => {
-        await Banner.find().then((response) => {
-            resolve(response);
+
+    try {
+
+        return new Promise(async (resolve, reject) => {
+            await Banner.find().then((response) => {
+                resolve(response);
+            });
         });
-    });
+        
+    } catch (error) {
+
+        console.log(error.message,'bannerListHelper');
+
+
+        
+    }
+
 }
 
 const deleteBannerHelper =async(deleteId)=>{
@@ -61,21 +81,31 @@ const editBannerHelper = async(bannerId) =>{
 
 
 const updateBannerHelper=async(texts, Image) => {
-    return new Promise(async (resolve, reject) => {
-         const bannerId = texts.id
-         console.log('bannerId',bannerId);
-        let response = await Banner.updateOne(
-          { _id: new mongoose.Types.ObjectId(bannerId) },
-          {
-            $set: {
-              title: texts.title,
-              description: texts.description,
-              image: Image,
-            },
-          }
-        );
-        resolve(response);
-      });
+    try {
+
+        return new Promise(async (resolve, reject) => {
+            const bannerId = texts.id
+            console.log('bannerId',bannerId);
+           let response = await Banner.updateOne(
+             { _id: new mongoose.Types.ObjectId(bannerId) },
+             {
+               $set: {
+                 title: texts.title,
+                 description: texts.description,
+                 image: Image,
+               },
+             }
+           );
+           resolve(response);
+         });
+        
+    } catch (error) {
+
+        console.log(error.message,'');
+
+        
+    }
+  
 }
 
 

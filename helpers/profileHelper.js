@@ -5,22 +5,40 @@ const { ObjectId } = require("mongodb");
 
 // Helper function to update the user's address
 const updateAddress = async (userId, newAddress) => {
-  const updatedUser = await Address.findOneAndUpdate(
-    { user: userId },
-    { $push: { addresses: newAddress } },
-    { new: true }
-  );
+  try {
+    const updatedUser = await Address.findOneAndUpdate(
+      { user: userId },
+      { $push: { addresses: newAddress } },
+      { new: true }
+    );
+  
+    return updatedUser;
+    
+  } catch (error) {
 
-  return updatedUser;
+    console.log(error.message,'');
+
+    
+  }
+
 };
 
 // Helper function to create a new user address
 const createAddress = async (userId, newAddress) => {
-  const userAddress = new Address({
-    user: userId,
-    addresses: [newAddress],
-  });
-  await userAddress.save();
+
+  try {
+    const userAddress = new Address({
+      user: userId,
+      addresses: [newAddress],
+    });
+    await userAddress.save();
+    
+  } catch (error) {
+    console.log(error.message,'');
+
+    
+  }
+
 };
 
 //get order details

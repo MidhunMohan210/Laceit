@@ -14,7 +14,7 @@ const bannerHelper = require("../helpers/bannerHelper");
 
 const { ObjectId } = require("mongodb");
 const { addCoupon } = require("./trash");
-const { response } = require("../routes/adminRoute");
+// const { response } = require("../routes/adminRoute");
 
 const maxAge = 3 * 24 * 60 * 60;
 const createToken = (id) => {
@@ -303,7 +303,9 @@ const orderList = async (req, res) => {
 //change status
 
 const changeStatus = async (req, res) => {
-  console.log("haiii");
+ 
+try {
+
   const orderId = req.body.orderId;
   const status = req.body.status;
   console.log(orderId);
@@ -311,6 +313,12 @@ const changeStatus = async (req, res) => {
     console.log(response);
     res.send(response);
   });
+  
+} catch (error) {
+
+  console.log(error.message, 'changeStatus');
+  
+}
 };
 
 const cancelOrder = (req, res) => {
@@ -425,6 +433,8 @@ const orderDetails = async (req, res) => {
 //return order
 
 const returnOrder = async (req, res) => {
+try {
+
   const orderId = req.body.orderId;
   const status = req.body.status;
   const user = res.locals.user;
@@ -433,50 +443,76 @@ const returnOrder = async (req, res) => {
   adminHelper.returnOrder(orderId, status, user).then((response) => {
     res.send(response);
   });
+  
+} catch (error) {
+
+  console.log(error.message,'returnOrder');
+  
+}
 };
 
 ////salesReport
 const getSalesReport = async (req, res) => {
-  const report = await adminHelper.getSalesReport();
-  let details = [];
-  const getDate = (date) => {
-    const orderDate = new Date(date);
-    const day = orderDate.getDate();
-    const month = orderDate.getMonth() + 1;
-    const year = orderDate.getFullYear();
-    return `${isNaN(day) ? "00" : day} - ${isNaN(month) ? "00" : month} - ${
-      isNaN(year) ? "0000" : year
-    }`;
-  };
 
-  report.forEach((orders) => {
-    details.push(orders.orders);
-  });
+  try {
 
-  res.render("salesReport", { details, getDate });
+    const report = await adminHelper.getSalesReport();
+    let details = [];
+    const getDate = (date) => {
+      const orderDate = new Date(date);
+      const day = orderDate.getDate();
+      const month = orderDate.getMonth() + 1;
+      const year = orderDate.getFullYear();
+      return `${isNaN(day) ? "00" : day} - ${isNaN(month) ? "00" : month} - ${
+        isNaN(year) ? "0000" : year
+      }`;
+    };
+  
+    report.forEach((orders) => {
+      details.push(orders.orders);
+    });
+  
+    res.render("salesReport", { details, getDate });
+    
+  } catch (error) {
+
+    console.log(error.message,'getSalesReport');
+    
+  }
+
 };
 
 const postSalesReport = (req, res) => {
-  const admin = req.session.admin;
-  const details = [];
-  const getDate = (date) => {
-    const orderDate = new Date(date);
-    const day = orderDate.getDate();
-    const month = orderDate.getMonth() + 1;
-    const year = orderDate.getFullYear();
-    return `${isNaN(day) ? "00" : day} - ${isNaN(month) ? "00" : month} - ${
-      isNaN(year) ? "0000" : year
-    }`;
-  };
+  try {
 
-  adminHelper.postReport(req.body).then((orderData) => {
-    console.log(orderData, "orderData");
-    orderData.forEach((orders) => {
-      details.push(orders.orders);
+    const admin = req.session.admin;
+    const details = [];
+    const getDate = (date) => {
+      const orderDate = new Date(date);
+      const day = orderDate.getDate();
+      const month = orderDate.getMonth() + 1;
+      const year = orderDate.getFullYear();
+      return `${isNaN(day) ? "00" : day} - ${isNaN(month) ? "00" : month} - ${
+        isNaN(year) ? "0000" : year
+      }`;
+    };
+  
+    adminHelper.postReport(req.body).then((orderData) => {
+      console.log(orderData, "orderData");
+      orderData.forEach((orders) => {
+        details.push(orders.orders);
+      });
+      console.log(details, "details");
+      res.render("salesReport", { details, getDate });
     });
-    console.log(details, "details");
-    res.render("salesReport", { details, getDate });
-  });
+    
+  } catch (error) {
+
+    console.log(error.message,'postSalesReport');
+
+    
+  }
+
 };
 
 // load add coupon
@@ -555,14 +591,26 @@ const addBannerGet = async (req, res) => {
 //add banner
 
 const addBannerPost = async (req, res) => {
-  bannerHelper.addBannerHelper(req.body, req.file.filename).then((response) => {
-    if (response) {
-      // res.redirect("/admin/addBanner");
-      res.render("addBanner", { message: "Banner added successfully" });
-    } else {
-      res.status(505);
-    }
-  });
+
+  try {
+
+    bannerHelper.addBannerHelper(req.body, req.file.filename).then((response) => {
+      if (response) {
+        // res.redirect("/admin/addBanner");
+        res.render("addBanner", { message: "Banner added successfully" });
+      } else {
+        res.status(505);
+      }
+    });
+    
+  } catch (error) {
+
+    console.log(error.message,'');
+
+
+    
+  }
+
 };
 
 //bannerlist
@@ -577,16 +625,35 @@ const bannerList = async (req, res) => {
 };
 
 const deleteBanner = async (req, res) => {
+ try {
+
   bannerHelper.deleteBannerHelper(req.query.id).then(() => {
     res.redirect("/admin/bannerList");
   });
+  
+ } catch (error) {
+
+  console.log(error.message,'deleteBanner');
+  
+ }
 };
 
 //log out
 
 const logout = (req, res) => {
-  res.clearCookie("jwtadmin");
-  res.redirect("/admin");
+
+  try {
+
+    res.clearCookie("jwtadmin");
+    res.redirect("/admin");
+    
+  } catch (error) {
+    console.log(error.message,'logout');
+
+
+    
+  }
+
 };
 
 module.exports = {

@@ -31,51 +31,60 @@ const loadProducts = async (req, res) => {
 ///sunmit add product
 
 const createProduct = async (req, res) => {
-  const { name, description, category, price } = req.body;
-  const filesArray = Object.values(req.files).flat();
-  const images = filesArray.map((file) => file.filename);
-  let categories = await Category.find({});
+  try {
 
-  if (name.trim().length === 0 || description.trim().length === 0) {
-    return res.render("addProduct2", {
-      message: "Product title and description cannot be empty",
-      category: categories,
-    });
-  }
-
-  // Validation for product price
-  const parsedPrice = parseFloat(price);
-  if (isNaN(parsedPrice) || parsedPrice < 0) {
-    return res.render("addProduct2", {
-      message:
-        "Product price cannot be empty and should be a non-negative number",
-      category: categories,
-    });
-  }
-
-  const newProduct = new Product({
-    name,
-    description,
-    images,
-    category,
-    price,
-  });
-
-  newProduct
-    .save()
-    .then(() => {
-      res.render("addProduct2", {
-        message: "product added succesfully",
+    const { name, description, category, price } = req.body;
+    const filesArray = Object.values(req.files).flat();
+    const images = filesArray.map((file) => file.filename);
+    let categories = await Category.find({});
+  
+    if (name.trim().length === 0 || description.trim().length === 0) {
+      return res.render("addProduct2", {
+        message: "Product title and description cannot be empty",
         category: categories,
       });
-    })
-    .catch((err) => {
-      console.error("Error adding product:", err);
-      res.render("addProduct2", {
-        message: "Error in adding Product",
+    }
+  
+    // Validation for product price
+    const parsedPrice = parseFloat(price);
+    if (isNaN(parsedPrice) || parsedPrice < 0) {
+      return res.render("addProduct2", {
+        message:
+          "Product price cannot be empty and should be a non-negative number",
         category: categories,
       });
+    }
+  
+    const newProduct = new Product({
+      name,
+      description,
+      images,
+      category,
+      price,
     });
+  
+    newProduct
+      .save()
+      .then(() => {
+        res.render("addProduct2", {
+          message: "product added succesfully",
+          category: categories,
+        });
+      })
+      .catch((err) => {
+        console.error("Error adding product:", err);
+        res.render("addProduct2", {
+          message: "Error in adding Product",
+          category: categories,
+        });
+      });
+    
+  } catch (error) {
+
+    console.log(error.message,'createProduct');
+    
+  }
+
 };
 
 ////editProductList

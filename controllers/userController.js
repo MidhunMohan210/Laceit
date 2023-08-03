@@ -69,6 +69,8 @@ const loadRegister = async (req, res) => {
 //submit register  and send otp
 
 const insertUser = async (req, res) => {
+ try {
+  
   const email = req.body.email;
   const num = req.body.mno;
 
@@ -109,6 +111,11 @@ const insertUser = async (req, res) => {
   } catch (error) {
     console.log(error.message);
   }
+ } catch (error) {
+
+  console.log(error.message);
+  
+ }
 };
 
 //verify login
@@ -167,8 +174,9 @@ const verifyLogin = async (req, res) => {
 ///resend otp
 
 const resendOTP = async (req, res) => {
-  const mobileNumber = req.session.mobile;
   try {
+  const mobileNumber = req.session.mobile;
+
     // Retrieve user data from session storage
     const userData = req.session.userData;
 
@@ -203,8 +211,9 @@ const resendOTP = async (req, res) => {
 ///verify otp
 
 const verifyOtp = async (req, res) => {
-  const otp = req.body.otp;
   try {
+  const otp = req.body.otp;
+
     const sessionOTP = req.session.otp;
     const userData = req.session.userData;
 
@@ -305,39 +314,57 @@ const resetPasswordOtpVerify = async (req, res) => {
 
 const setNewPassword = async (req, res) => {
 
+  try {
 
-  const newpw = req.body.newPassword;
-  const confpw = req.body.confirmPassword;
+    const newpw = req.body.newPassword;
+    const confpw = req.body.confirmPassword;
+  
+    const mobile = req.session.mobile;
+    const email = req.session.email;
+  
+    if (newpw === confpw) {
+      const spassword = await securePassword(newpw);
+      const newUser = await User.updateOne(
+        { email: email },
+        { $set: { password: spassword } }
+      );
+  
+      console.log(newUser);
+      res.redirect("/login")
+  
+     
+  
+      console.log("Password updated successfully");
+    } else {
+      res.render("resetPassword", {
+        message: "Password and Confirm Password is not matching",
+      });
+    }
+    
+  } catch (error) {
 
-  const mobile = req.session.mobile;
-  const email = req.session.email;
-
-  if (newpw === confpw) {
-    const spassword = await securePassword(newpw);
-    const newUser = await User.updateOne(
-      { email: email },
-      { $set: { password: spassword } }
-    );
-
-    console.log(newUser);
-    res.redirect("/login")
-
-   
-
-    console.log("Password updated successfully");
-  } else {
-    res.render("resetPassword", {
-      message: "Password and Confirm Password is not matching",
-    });
+    console.log(error.message);
+    
   }
+
+
+ 
 };
 
 const logout = (req, res) => {
+try {
+
   res.clearCookie("jwt");
   res.redirect("/login");
-  // res.send("hai")
+  
+} catch (error) {
+
+  console.log(error.message);
+  
+}
+ 
 };
-``;
+
 const displayProduct = async (req, res) => {
   try {
     const page = parseInt(req.query.page) || 1;
@@ -482,7 +509,9 @@ const searchProduct = async (req, res) => {
       totalPages,
       searchQuery,
     });
-  } catch (error) {}
+  } catch (error) {
+    console.log(error.message);
+  }
 };
 
 //priceFilter

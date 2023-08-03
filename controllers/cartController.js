@@ -1,7 +1,7 @@
 const cartHelper = require("../helpers/cartHelper");
 const Cart = require("../models/cartModel");
 const Product = require("../models/productModel");
-const { response } = require("../routes/userRoute");
+ 
 
 const addToCart = async (req, res) => {
   try {
@@ -96,9 +96,18 @@ const updatecart = async (req, res) => {
 };
 
 const deleteCart = async (req, res) => {
-  cartHelper.deleteProduct(req.body).then((response) => {
-    res.send(response);
-  });
+  try {
+
+    cartHelper.deleteProduct(req.body).then((response) => {
+      res.send(response);
+    });
+    
+  } catch (error) {
+
+    console.log(error.message,'deleteCart');
+    
+  }
+ 
 };
 
 module.exports = {

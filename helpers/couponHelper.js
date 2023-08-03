@@ -8,6 +8,8 @@ const { log } = require("util");
 
 //generete coupon code
 const generateCouponCode = () => {
+try {
+
   return new Promise((resolve, reject) => {
     let couponCode = voucherCode.generate({
       length: 6,
@@ -24,6 +26,12 @@ const generateCouponCode = () => {
       reject(error);
     }
   });
+  
+} catch (error) {
+  console.log(error.message,'generateCouponCode');
+
+  
+}
 };
 
 //add coupon

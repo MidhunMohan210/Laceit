@@ -126,26 +126,37 @@ const returnOrder = (orderId, status,USERdata) => {
 };
 
 const getOnlineCount = () => {
-  return new Promise(async (resolve, reject) => {
-    const response = await Order.aggregate([
-      {
-        $unwind: "$orders",
-      },
-      {
-        $match: {
-          "orders.paymentMethod": "razorpay",
+
+  try {
+    return new Promise(async (resolve, reject) => {
+      const response = await Order.aggregate([
+        {
+          $unwind: "$orders",
         },
-      },
-      {
-        $group: {
-          _id: null,
-          totalPriceSum: { $sum: { $toInt: "$orders.totalPrice" } },
-          count: { $sum: 1 },
+        {
+          $match: {
+            "orders.paymentMethod": "razorpay",
+          },
         },
-      },
-    ]);
-    resolve(response);
-  });
+        {
+          $group: {
+            _id: null,
+            totalPriceSum: { $sum: { $toInt: "$orders.totalPrice" } },
+            count: { $sum: 1 },
+          },
+        },
+      ]);
+      resolve(response);
+    });
+    
+  } catch (error) {
+
+    console.log(error.message,'getOnlineCount');
+
+
+    
+  }
+
 };
 
 ///get sales report
@@ -172,8 +183,9 @@ const getSalesReport = () => {
 };
 
 const postReport = (date) => {
-  console.log(date, "date+++++");
+ 
   try {
+    console.log(date, "date+++++");
     const start = new Date(date.startdate);
     const end = new Date(date.enddate);
     return new Promise((resolve, reject) => {

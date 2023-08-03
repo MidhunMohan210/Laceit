@@ -2,6 +2,8 @@ const wishListHelper = require('../helpers/wishListHelper')
 const cartHelper = require('../helpers/cartHelper')
 
 const getWishList = async (req, res) => {
+  try {
+
     let user = res.locals.user;
     // let count = await cartHelper.getCartCount(user._id);
     const wishlistCount = await wishListHelper.getWishListCount(user._id);
@@ -14,22 +16,38 @@ const getWishList = async (req, res) => {
         wishlistCount,
       });
     });
+    
+  } catch (error) {
+    console.log(error.message,'getWishList');
+    
+  }
+    
   }
 
   const addWishList = async (req, res) => {
 
-    console.log("add to wish listtt");
-    let proId = req.body.proId;
-    let userId = res.locals.user._id;
-    wishListHelper.addWishList(userId, proId).then((response) => {
-    res.send(response);
-    });
+    try {
+
+      let proId = req.body.proId;
+      let userId = res.locals.user._id;
+      wishListHelper.addWishList(userId, proId).then((response) => {
+      res.send(response);
+      });
+      
+    } catch (error) {
+
+      console.log(error.message,'addWishList');
+
+      
+    }
+
+
+  
   }
 
   const removeProductWishlist = async (req, res) => {
-
-    console.log("removeeeeeeeeeeee");
-
+    try {
+      
     const userId=res.locals.user._id
 
     const proId = req.body.proId;
@@ -39,6 +57,15 @@ const getWishList = async (req, res) => {
       .then((response) => {
         res.send(response);
       });
+      
+    } catch (error) {
+      console.log(error.message,'removeProductWishlist');
+
+      
+    }
+
+    
+
   }
 
   module.exports = {

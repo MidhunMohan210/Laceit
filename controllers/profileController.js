@@ -79,36 +79,50 @@ const submitAddress = async (req, res) => {
 
 const editAddress = async (req, res) => {
 
-  const id = req.body.id;
-  const name = req.body.name;
-  const address = req.body.address;
-  const locality = req.body.locality;
-  const city = req.body.city;
-  const pincode = req.body.pincode;
-  const state = req.body.state;
-  const mobileNumber = req.body.mobileNumber;
+  try {
 
-  const update = await Address.updateOne(
-    { "addresses._id": id }, // Match the document with the given ID
-    {
-      $set: {
-        "addresses.$.name": name,
-        "addresses.$.address": address,
-        "addresses.$.locality": locality,
-        "addresses.$.city": city,
-        "addresses.$.pincode": pincode,
-        "addresses.$.state": state,
-        "addresses.$.mobileNumber": mobileNumber,
-      },
-    }
-  );
+    const id = req.body.id;
+    const name = req.body.name;
+    const address = req.body.address;
+    const locality = req.body.locality;
+    const city = req.body.city;
+    const pincode = req.body.pincode;
+    const state = req.body.state;
+    const mobileNumber = req.body.mobileNumber;
+  
+    const update = await Address.updateOne(
+      { "addresses._id": id }, // Match the document with the given ID
+      {
+        $set: {
+          "addresses.$.name": name,
+          "addresses.$.address": address,
+          "addresses.$.locality": locality,
+          "addresses.$.city": city,
+          "addresses.$.pincode": pincode,
+          "addresses.$.state": state,
+          "addresses.$.mobileNumber": mobileNumber,
+        },
+      }
+    );
+  
+    res.redirect("/profile");
+    
+  } catch (error) {
 
-  res.redirect("/profile");
+    console.log(error.message,'editAddress');
+
+
+    
+  }
+
+
 };
 
 ///delete address
 
 const deleteAddress = async (req, res) => {
+try {
+
   const userId = res.locals.user._id;
   const addId = req.body.addressId;
 
@@ -119,6 +133,14 @@ const deleteAddress = async (req, res) => {
   );
 
   res.redirect("/profile");
+  
+} catch (error) {
+
+  console.log(error.message,'deleteAddress');
+
+
+  
+}
 };
 
 ///edit info
