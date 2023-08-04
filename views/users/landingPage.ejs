@@ -44,6 +44,10 @@
 	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.1.5/dist/sweetalert2.min.js"></script>
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.7.7/nouislider.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lineicons@2.0.2/dist/css/LineIcons.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    
+    
+
 
 
 <!-- jQuery -->
@@ -101,7 +105,21 @@
 
                                         </ul>
                                     </li>
-                                    <% } %>
+                                    <% } else { %>
+                                        <li>
+                                            <a href="#" class="sf-with-ul">
+                                                Account
+                                            </a>
+    
+                                            <ul>
+                                                <li><a href="/login">Login</a></li>
+                                                <li><a href="/register">Signup</a></li>
+    
+    
+                                            </ul>
+                                        </li>
+                                        <% } %>
+
                             </ul><!-- End .menu -->
                         </nav><!-- End .main-nav -->
 
@@ -113,10 +131,12 @@
                                 <i class="icon-shopping-cart"></i>
 
                             </a>
-                            <a href="/loadWishList" class="dropdown-toggle" role="button" data-toggle="dropdown"
+                            <a href="/viewCart" class="dropdown-toggle" role="button" data-toggle="dropdown"
                             aria-haspopup="true" aria-expanded="false" data-display="static">
-                            <i class="lnr lnr-magnifier"></i>
+                            <i class="fa fa-heart-o" aria-hidden="true"></i>
 
+                        </a>
+                           
                         </a>
 
 
@@ -653,6 +673,28 @@
         window.location.href = url;
     }
 </script>
+
+
+<script>
+    // Function to handle the click event
+    function loadViewCart() {
+        // Replace the URL with the appropriate path to your viewcart page
+        window.location.href = "/viewCart";
+    }
+
+    // Get the shopping cart icon element by its class or ID
+    const cartIcon = document.querySelector(".icon-shopping-cart");
+    
+    // Attach the onclick event listener to the icon
+    cartIcon.addEventListener("click", loadViewCart);
+</script>
+In this example, we've created a JavaScript function called loadViewCart that sets the window.location.href to the desired URL, which is "/viewCart". When the shopping cart icon is clicked, the loadViewCart function will be called, and the user will be redirected to the specified view cart page.
+
+
+
+
+
+
 
 
 
