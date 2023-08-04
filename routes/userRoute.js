@@ -42,6 +42,8 @@ userRoute.use(cookieparser())
 
 //home page
 userRoute.all('*',validate.checkUser)
+userRoute.get('/',userController.homeLoad)
+
 userRoute.get('/home',userController.homeLoad)
 
 //register

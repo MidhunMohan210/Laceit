@@ -426,6 +426,14 @@ function changePassword() {
     return;
   }
 
+  // Password validation using the provided regex
+  var passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%#?&])[a-zA-Z\d@$!%#?&]{8,}$/;
+  if (!passwordRegex.test(newPassword)) {
+    messageBlock.innerText = "Password must contain 1 special character, 1 uppercase character, and 1 number, and its length should be at least 8 characters.";
+    messageBlock.style.display = "block";
+    return;
+  }
+
 
   // Perform AJAX request to update the password
   $.ajax({

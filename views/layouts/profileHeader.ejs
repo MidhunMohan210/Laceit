@@ -123,14 +123,35 @@
 								data-delay="350" role="button" aria-haspopup="true" aria-expanded="false">
 								<%=user.fname%><span>
 								</span>
+								<ul class="dropdown-menu">
+									<li class="nav-item active"><a class="nav-link" href="/profile">Profile</a></li>
+									<li class="nav-item active"><a class="nav-link" href="/logout">Log Out</a></li>
+								</ul>
 							</a>
 						</li><!-- / Blog -->
-						<% } %>
+						<% } else { %>
+							<li class="dropdown dropdown-slide">
+								<a href="#!" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown"
+									data-delay="350" role="button" aria-haspopup="true" aria-expanded="false">
+									Account<span>
+									</span>
+									<ul class="dropdown-menu">
+										<li class="nav-item active"><a class="nav-link" href="/login">Login</a></li>
+                                        <li class="nav-item"><a class="nav-link" href="/register">Signup</a></li>
+								</a>
+							</li><!-- / Blog -->
+							<% } %>
 						<li>
-							<a href="/cart" class="cart-icon">
+							<a href="/loadWishList" class="cart-icon">
+								<i class="fa fa-heart"></i>
+							</a>
+						</li>
+						<li>
+							<a href="/viewCart" class="cart-icon">
 								<i class="fa fa-shopping-cart"></i>
 							</a>
 						</li>
+						
 						
 					</ul>
 	

@@ -6,12 +6,13 @@ const Address = require("../models/userAddressModel");
 const Cart = require("../models/cartModel");
 const Category = require("../models/categoryModel");
 const Banner = require("../models/bannerModel");
+const otpHelper = require("../helpers/otpHelper");
 const { ObjectId } = require("mongodb");
-require('dotenv/config')
-const client = require('twilio')(process.env.TWILIO_SID, process.env.TWILIO_AUTH_TOKEN);
-
-
-
+require("dotenv/config");
+const client = require("twilio")(
+  process.env.TWILIO_SID,
+  process.env.TWILIO_AUTH_TOKEN
+);
 
 const maxAge = 3 * 24 * 60 * 60;
 const createToken = (id) => {
@@ -33,12 +34,17 @@ const securePassword = async (password) => {
 const homeLoad = async (req, res) => {
   try {
     const banner = await Banner.find({});
-    const product=await Product.find({}).skip(2).limit(5)
-    const category=await Category.find({})
-    console.log('product',product);
+    const product = await Product.find({}).skip(2).limit(5);
+    const category = await Category.find({});
+    console.log("product", product);
     console.log(banner);
     // const category = await Category.find({ })
-    res.render("landingPage", { user: res.locals.user, banner,product,category });
+    res.render("landingPage", {
+      user: res.locals.user,
+      banner,
+      product,
+      category,
+    });
 
     // res.render("landingPage");
   } catch (error) {
@@ -69,53 +75,55 @@ const loadRegister = async (req, res) => {
 //submit register  and send otp
 
 const insertUser = async (req, res) => {
- try {
-  
-  const email = req.body.email;
-  const num = req.body.mno;
-
-  const existingUser = await User.findOne({ email: email });
-  const existingNum = await User.findOne({ mobile: num });
-
-  if (existingUser) {
-    return res.render("register", { message: "Email already exists" });
-  }
-  if (existingNum) {
-    return res.render("register", { message: "Number already exists" });
-  }
-
-  if (/\d/.test(req.body.fname) || /\d/.test(req.body.lname)) {
-    return res.render("register", {
-      message: "Name should not contain numbers",
-    });
-  }
-
-  const mobileNumber = req.body.mno;
-  const otp = otpGenerator.generate(6, {
-    upperCase: false,
-    specialChars: false,
-    upperCaseAlphabets: false,
-    lowerCaseAlphabets: false,
-  });
-  // await client.messages.create({
-  //   body: `Your OTP for Smart Wrist Sign Up is: ${otp}`,
-  //   from: "+18623226158",
-  //   to: `${mobileNumber}`,
-  // });
-  console.log(`Otp is ${otp}`);
   try {
-    req.session.otp = otp;
-    req.session.userData = req.body;
-    req.session.mobile = mobileNumber;
-    res.render("verifyOtp");
+    const email = req.body.email;
+    const num = req.body.mno;
+    const fname = req.body.fname.trim();
+    const lname = req.body.lname.trim();
+    const password = req.body.password.trim();
+    if (!email || !num || !fname || !lname || !password) {
+      return res.render("register", { message: "Please fill in all the fields" });
+    }
+
+
+    const existingUser = await User.findOne({ email: email });
+    const existingNum = await User.findOne({ mobile: num });
+
+    if (existingUser) {
+      return res.render("register", { message: "Email already exists" });
+    }
+    if (existingNum) {
+      return res.render("register", { message: "Number already exists" });
+    }
+
+    if (/\d/.test(req.body.fname) || /\d/.test(req.body.lname)) {
+      return res.render("register", {
+        message: "Name should not contain numbers",
+      });
+    }
+
+    if (!/^(\+91)?\d{10}$/.test(num)) {
+      return res.render("register", { message: "Mobile number should contain +91 as prefix and should not contain any characters and symbol" });
+    }
+
+  
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%#?&])[a-zA-Z\d@$!%#?&]{8,}$/;
+    if (!passwordRegex.test(password)) {
+      return res.render("register", { message: "Password must conatain 1 special character 1 uppercase character and 1 number and strength should be 8" });
+    }
+
+    await otpHelper.sendOtp(num);
+    try {
+      req.session.userData = req.body;
+      req.session.mobile = num;
+      res.render("verifyOtp");
+    } catch (error) {
+      console.log(error.message);
+      res.redirect("/error-500");
+    }
   } catch (error) {
     console.log(error.message);
   }
- } catch (error) {
-
-  console.log(error.message);
-  
- }
 };
 
 //verify login
@@ -175,7 +183,7 @@ const verifyLogin = async (req, res) => {
 
 const resendOTP = async (req, res) => {
   try {
-  const mobileNumber = req.session.mobile;
+    const mobileNumber = req.session.mobile;
 
     // Retrieve user data from session storage
     const userData = req.session.userData;
@@ -185,21 +193,8 @@ const resendOTP = async (req, res) => {
     }
 
     // Generate and send new OTP using Twilio
-    const otp = otpGenerator.generate(6, {
-      upperCase: false,
-      specialChars: false,
-      upperCaseAlphabets: false,
-      lowerCaseAlphabets: false,
-    });
 
-    req.session.otp = otp;
-
-    // await client.messages.create({
-    //   body: `Your OTP for  Sign Up is: ${otp}`,
-    //   from: "+18623226158",
-    //   to: `+91${mobileNumber}`,
-    // });
-    console.log(`Resend Otp is ${otp}`);
+    await otpHelper.sendOtp(mobileNumber);
 
     res.render("verifyOtp", { message: "OTP resent successfully" });
   } catch (error) {
@@ -212,16 +207,13 @@ const resendOTP = async (req, res) => {
 
 const verifyOtp = async (req, res) => {
   try {
-  const otp = req.body.otp;
+    const otp = req.body.otp;
 
-    const sessionOTP = req.session.otp;
+  
     const userData = req.session.userData;
+    const verified = await otpHelper.verifyCode(userData.mno, otp);
 
-    if (!sessionOTP || !userData) {
-      res.render("verifyOtp", { message: "Invalid Session" });
-    } else if (sessionOTP !== otp) {
-      res.render("verifyOtp", { message: "Invalid OTP" });
-    } else {
+    if (verified) {
       const spassword = await securePassword(userData.password);
       const user = new User({
         fname: userData.fname,
@@ -242,6 +234,8 @@ const verifyOtp = async (req, res) => {
       } else {
         res.render("register", { message: "Registration Failed" });
       }
+    } else {
+      res.render("verifyOtp", { message: "Wrong Otp" });
     }
   } catch (error) {
     console.log(error.message);
@@ -268,18 +262,10 @@ const forgotPasswordOtp = async (req, res) => {
     if (!user) {
       res.render("forgetPassword", { message: "User Not Registered" });
     } else {
-      const OTP = otpGenerator.generate(6, {
-        lowerCaseAlphabets: false,
-        upperCaseAlphabets: false,
-        specialChars: false,
-      });
-      // await client.messages.create({
-      //   body: `Your OTP for Smart Wrist Sign Up is: ${OTP}`,
-      //   from: "+18623226158",
-      //   to: `+91${user.mobile}`,
-      // });
-      console.log(`Forgot Password otp is --- ${OTP}`);
-      req.session.otp = OTP;
+    
+      await otpHelper.sendOtp(req.session.mobile);
+
+      // req.session.otp = OTP;
       req.session.email = user.email;
       res.render("forgetPassword", { mobile: req.query.mobileNumber });
     }
@@ -291,17 +277,13 @@ const forgotPasswordOtp = async (req, res) => {
 const resetPasswordOtpVerify = async (req, res) => {
   try {
     const mobile = req.session.mobile;
-    const otp = req.session.otp;
-
-    console.log("session otp", otp);
 
     const reqOtp = req.body.otp;
 
+    const verified = await otpHelper.verifyCode(mobile, reqOtp);
+
     const otpHolder = await User.find({ mobile: req.body.mobile });
-    if (otp == reqOtp) {
-      //sending token as a cookie
-      const token = createToken(User._id);
-      // res.cookie("jwt", token, { httpOnly: true, maxAge: maxAge * 1000 });
+    if (verified) {
       res.render("changePassword");
     } else {
       res.render("forgetPassword", { message: "Wrong OTP" });
@@ -313,56 +295,49 @@ const resetPasswordOtpVerify = async (req, res) => {
 };
 
 const setNewPassword = async (req, res) => {
-
   try {
-
     const newpw = req.body.newPassword;
     const confpw = req.body.confirmPassword;
-  
+
     const mobile = req.session.mobile;
     const email = req.session.email;
-  
+
+    // Password validation using the provided regex
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%#?&])[a-zA-Z\d@$!%#?&]{8,}$/;
+    if (!passwordRegex.test(newpw)) {
+      return res.render("changePassword", {
+        message: "Password must contain 1 special character, 1 uppercase character, and 1 number, and its length should be at least 8 characters",
+      });
+    }
+
     if (newpw === confpw) {
       const spassword = await securePassword(newpw);
       const newUser = await User.updateOne(
         { email: email },
         { $set: { password: spassword } }
       );
-  
+
       console.log(newUser);
-      res.redirect("/login")
-  
-     
-  
+      res.redirect("/login");
+
       console.log("Password updated successfully");
     } else {
-      res.render("resetPassword", {
+      res.render("changePassword", {
         message: "Password and Confirm Password is not matching",
       });
     }
-    
   } catch (error) {
-
     console.log(error.message);
-    
   }
-
-
- 
 };
 
 const logout = (req, res) => {
-try {
-
-  res.clearCookie("jwt");
-  res.redirect("/login");
-  
-} catch (error) {
-
-  console.log(error.message);
-  
-}
- 
+  try {
+    res.clearCookie("jwt");
+    res.redirect("/login");
+  } catch (error) {
+    console.log(error.message);
+  }
 };
 
 const displayProduct = async (req, res) => {
@@ -592,7 +567,6 @@ const priceFilter2 = async (req, res) => {
 
     const filter = req.query.filter;
 
-
     const categories = await Category.find({ isListed: true });
     const catId = await Category.aggregate([
       {
@@ -638,8 +612,6 @@ const priceFilter2 = async (req, res) => {
       .skip(skip)
       .limit(limit);
 
-
-
     res.render("shopPriceFilter2", {
       product: products,
       categories,
@@ -671,12 +643,12 @@ const checkout = async (req, res) => {
       let addArray = [];
 
       if (result.length > 0) {
-        primary =result[0].addresses[0]
+        primary = result[0].addresses[0];
         addArray = result[0].addresses;
       }
 
-      console.log("primary",primary);
-      console.log("addArray",addArray);
+      console.log("primary", primary);
+      console.log("addArray", addArray);
 
       const cart = CartData[0];
 
