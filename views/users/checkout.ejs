@@ -190,7 +190,9 @@
                     <div class="billing_details" style="margin-top: 0px;">
                         <div class="row">
                             <div class="col-lg-8">
-                            <h3>Shipping Details</h3>
+                               <h3>Shipping Details</h3>
+
+                                         <% if (addArray.length > 0) { %>
 
                                             <input type="hidden" placeholder="Name" class="form-control" id="first"
                                                 name="addressId" value="<%=addArray[0]._id%>">
@@ -236,6 +238,9 @@
                                                 <a class="button" style="color: #fff; border-radius: 20px;">CHANGE
                                                     ADDRESS</a>
                                             </div>
+
+                                         
+
                                             <div class="banner-desc2"
                                                 style="margin-left: 15px; margin-top:15px; margin-bottom: 30px; ">
                                                 <a class="button" style="color: #fff; border-radius: 20px;">ADD
@@ -254,6 +259,13 @@
                                                     <textarea class="form-control" name="message" id="message" rows="1"
                                                         placeholder="Order Notes"></textarea>
                                                 </div>
+
+                                                <% } else { %>
+                                                    <!-- Add Address button when addArray is empty -->
+                                                    <div class="banner-desc2" style="margin-left: 15px; margin-top: 15px; margin-bottom: 30px;">
+                                                        <a class="button" id="addAddressBtn" style="color: #fff; border-radius: 20px;">ADD ADDRESS</a>
+                                                    </div>
+                                                <% } %>
                                 </form>
                             </div>
                             <div class="col-lg-4 col-md-6">
@@ -511,13 +523,13 @@
                 </div>
                 <br>
                 <div class="comment-list grid-view" style="height: 500px; ">
-                    <form id="addressForm2" action="/submitAddress" method="POST"
+                    <form id="addressForm2" action="/submitAddressCheckOut" method="POST"
                         style="font-size: 15px; background-color: #ffffff; padding: 30px; display: grid; grid-template-columns: 85px 1fr; grid-gap: 13px;">
                         <label for="name">Name:</label>
                         <input type="text" name="name" id="name" required>
 
                         <label for="mobile">Mobile:</label>
-                        <input type="text" name="mno" id="mobile" required>
+                        <input type="text" name="mno" id="mobile"  required>
 
                         <label for="address">Address:</label>
                         <input type="text" name="address" id="address" required>
@@ -544,6 +556,10 @@
                 </div>
             </div>
             <div class="overlay-pop-up"></div>
+
+
+
+       
 
 
 
@@ -590,7 +606,37 @@
             $(document).ready(function () {
                 $('#addressForm2').submit(function (event) {
                     event.preventDefault(); // Prevent form submission
-
+        
+                    // Validate form fields
+                    const name = $('#name').val().trim();
+                    const mobile = $('#mobile').val().trim();
+                    const pincode = $('#pincode').val().trim();
+                    const city = $('#city').val().trim();
+                    const state = $('#state').val().trim();
+        
+                    // Check if fields are empty
+                    if (!name || !mobile || !pincode || !city || !state) {
+                        $('#responseMessage').text('All fields are required.');
+                        return;
+                    }
+        
+                    // Check if name contains any numbers
+                    if (/\d/.test(name)) {
+                        $('#responseMessage').text('Name should not contain numbers.');
+                        return;
+                    }
+        
+                    // Check if mobile and pincode contain characters
+                    if (!/^\+?\d+$/.test(mobile)) {
+                        $('#responseMessage').text('Mobile should only contain numbers.');
+                        return;
+                    }
+        
+                    if (!/^\d+$/.test(pincode)) {
+                        $('#responseMessage').text('Pincode should only contain numbers.');
+                        return;
+                    }
+        
                     // Send AJAX request
                     $.ajax({
                         url: $(this).attr('action'),
@@ -598,11 +644,10 @@
                         data: $(this).serialize(),
                         success: function (response) {
                             if (response.message === 'Address saved successfully!') {
-
-                                console.log("ooooi");
                                 // Display success message
                                 $('#responseMessage').text('Address added successfully');
                                 $('#addressForm2')[0].reset();
+                                location.reload();
                             } else {
                                 // Handle error or display appropriate message
                                 $('#responseMessage').text('Failed to add address');
@@ -616,6 +661,7 @@
                 });
             });
         </script>
+        
 
 
 
@@ -648,55 +694,66 @@
 
 
         <script>
-            var popup = document.getElementsByClassName("pop-up-list")[0];
-            var popup2 = document.getElementsByClassName("pop-up-list")[1];
-
-            var overlay = document.getElementsByClassName("overlay-pop-up")[0];
-            var overlay2 = document.getElementsByClassName("overlay-pop-up")[1];
 
 
-            var button = document.getElementsByClassName("button")[0];
-            var button2 = document.getElementsByClassName("button")[1];
-            var button3 = document.getElementById("final")
+            var addAddressBtn = document.getElementById("addAddressBtn");
 
 
-            var close = document.getElementsByClassName('pop-up-button')[0];
-            var close2 = document.getElementsByClassName('pop-up-button')[1];
+            // Get all popup elements and overlays
+            var popups = document.querySelectorAll(".pop-up-list");
+            var overlays = document.querySelectorAll(".overlay-pop-up");
+            
+            // Get all buttons and close buttons
+            var buttons = document.querySelectorAll(".button");
+            var closes = document.querySelectorAll(".pop-up-button");
+            
+            // Function to open popup and overlay
+            function openPopup(popup, overlay) {
+              popup.style.display = "block";
+              overlay.style.display = "block";
+            }
+            
+            // Function to close popup and overlay
+            function closePopup(popup, overlay) {
+              popup.style.display = "none";
+              overlay.style.display = "none";
+            }
+            
+            // Add event listeners to each button to open the respective popup
+            buttons.forEach(function (button, index) {
+              button.onclick = function () {
+                openPopup(popups[index], overlays[index]);
+              };
+            });
+            
+            // Add event listeners to each overlay to close the respective popup
+            overlays.forEach(function (overlay, index) {
+              overlay.onclick = function () {
+                closePopup(popups[index], overlay);
+              };
+            });
+            
+            // Add event listeners to each close button to close the respective popup
+            closes.forEach(function (close, index) {
+              close.onclick = function () {
+                closePopup(popups[index], overlays[index]);
+              };
+            });
 
 
-            button.onclick = function () {
+            // Function to open popup and overlay
+            function openPopup(popup, overlay) {
                 popup.style.display = "block";
                 overlay.style.display = "block";
             }
-            button2.onclick = function () {
-                popup2.style.display = "block";
-                overlay2.style.display = "block";
-            }
-            button3.onclick = function () {
-                popup.style.display = "block";
-                overlay2.style.display = "block";
-            }
 
-            overlay.onclick = function () {
-                popup.style.display = "none";
-                overlay.style.display = "none";
-            }
-            overlay2.onclick = function () {
-                popup2.style.display = "none";
-                overlay2.style.display = "none";
-            }
-            close.onclick = function () {
-                popup.style.display = "none";
-                overlay.style.display = "none";
-
-            }
-            close2.onclick = function () {
-                popup2.style.display = "none";
-                overlay2.style.display = "none";
-
-            }
-
-        </script>
+            // Event listener for the "Add Address" button
+            addAddressBtn.onclick = function () {
+                // Open the existing popup when clicked
+                openPopup(popups[1], overlays[1]);
+            };
+          </script>
+          
 
 
         <script>
@@ -999,6 +1056,16 @@
 
 
         </script>
+
+
+        <!-- address form validation -->
+
+        
+        
+        
+        
+        
+        
 
 
 

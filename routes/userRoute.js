@@ -106,6 +106,7 @@ userRoute.delete('/delete-product-cart',validate.requireAuth,validate.checkBlock
 
 userRoute.get('/profile',validate.requireAuth,validate.checkBlocked,profileController.profile)  //load profile
 userRoute.post('/submitAddress',validate.requireAuth,validate.checkBlocked,profileController.submitAddress)  //submitAddress
+userRoute.post('/submitAddressCheckOut',validate.requireAuth,validate.checkBlocked,userController.submitAddressCheckOut)
 userRoute.post('/updateAddress',validate.requireAuth,validate.checkBlocked,profileController.editAddress)  //updateAddress
 userRoute.post('/deleteAddress',validate.requireAuth,validate.checkBlocked,profileController.deleteAddress)  //updateAddress
 userRoute.post('/editInfo',validate.requireAuth,validate.checkBlocked,profileController.editInfo)  //editInfo,

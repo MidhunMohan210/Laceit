@@ -7,6 +7,8 @@ const Cart = require("../models/cartModel");
 const Category = require("../models/categoryModel");
 const Banner = require("../models/bannerModel");
 const otpHelper = require("../helpers/otpHelper");
+const profileHelper = require("../helpers/profileHelper");
+
 const { ObjectId } = require("mongodb");
 require("dotenv/config");
 const client = require("twilio")(
@@ -639,11 +641,11 @@ const checkout = async (req, res) => {
     } else {
       const result = await Address.find({ user: userId }, { addresses: 1 });
 
-      let primary = null;
+      let primary = []
       let addArray = [];
 
       if (result.length > 0) {
-        primary = result[0].addresses[0];
+        primary = result[0].addresses.length > 0 ? [result[0].addresses[0]] : [];
         addArray = result[0].addresses;
       }
 
@@ -690,6 +692,44 @@ const changePrimary = async (req, res) => {
   }
 };
 
+
+const submitAddressCheckOut = async (req, res) => {
+  try {
+    const userId = res.locals.user._id;
+   
+    const name = req.body.name;
+    const mobileNumber = req.body.mno;
+    const address = req.body.address;
+    const locality = req.body.locality;
+    const city = req.body.city;
+    const pincode = req.body.pincode;
+    const state = req.body.state;
+
+    // Create a new address object
+    const newAddress = {
+      name: name,
+      mobileNumber: mobileNumber,
+      address: address,
+      locality: locality,
+      city: city,
+      pincode: pincode,
+      state: state,
+    };
+
+    const updatedUser = await profileHelper.updateAddress(userId, newAddress);
+    if (!updatedUser) {
+      // No matching document found, create a new one
+      await profileHelper.createAddress(userId, newAddress);
+    }
+
+    res.json({ message: "Address saved successfully!" });
+
+    res.redirect("/checkout"); 
+  } catch (error) {
+    console.log(error.message);
+  }
+};
+
 module.exports = {
   homeLoad,
   loadRegister,
@@ -711,4 +751,5 @@ module.exports = {
   searchProduct,
   priceFilter,
   priceFilter2,
+  submitAddressCheckOut
 };
