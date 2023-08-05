@@ -310,7 +310,7 @@ const walletTransaction = async(req,res)=>{
       {$project:{walletTransaction:1,wallet:1}}
     ])
 
-    res.render('walletTransaction',{wallet})
+    res.render('wallettransaction',{wallet})
     
   } catch (error) {
     console.log(error.message);
