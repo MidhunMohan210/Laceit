@@ -190,188 +190,193 @@
                     <div class="billing_details" style="margin-top: 0px;">
                         <div class="row">
                             <div class="col-lg-8">
-                               <h3>Shipping Details</h3>
+                                <h3>Shipping Details</h3>
 
-                                         <% if (addArray.length > 0) { %>
+                                <% if (addArray.length> 0) { %>
 
-                                            <input type="hidden" placeholder="Name" class="form-control" id="first"
-                                                name="addressId" value="<%=addArray[0]._id%>">
-
-
-                                            <div class="col-md-6 form-group p_star">
-
-                                                <input type="text" placeholder="Name" class="form-control" id="first"
-                                                    name="name" value="<%=addArray[0].name%>">
-
-                                            </div>
+                                    <input type="hidden" placeholder="Name" class="form-control" id="first"
+                                        name="addressId" value="<%=addArray[0]._id%>">
 
 
-                                            <div class="col-md-6 form-group p_star">
-                                                <input type="text" placeholder="Phone number" class="form-control"
-                                                    id="number" name="number" value="<%=addArray[0].mobileNumber%>">
-                                            </div>
+                                    <div class="col-md-6 form-group p_star">
 
+                                        <input type="text" placeholder="Name" class="form-control" id="first"
+                                            name="name" value="<%=addArray[0].name%>">
 
-                                            <div class="col-md-12 form-group p_star">
-                                                <input type="text" placeholder="Address line " class="form-control"
-                                                    id="add1" name="add1" value="<%=addArray[0].address%>">
-                                            </div>
-                                            <div class="col-md-12 form-group p_star">
-                                                <input type="text" placeholder="Locality" class="form-control" id="add2"
-                                                    name="add2" value="<%=addArray[0].locality%>">
-                                            </div>
-                                            <div class="col-md-12 form-group p_star">
-                                                <input type="text" placeholder="City" class="form-control" id="city"
-                                                    name="city" value="<%=addArray[0].city%>">
-                                            </div>
-                                            <div class="col-md-12 form-group p_star">
-                                                <input type="text" placeholder="State" class="form-control" id="city"
-                                                    name="city" value="<%=addArray[0].state%>">
-
-                                            </div>
-                                            <div class="col-md-12 form-group">
-                                                <input type="text" class="form-control" id="zip" name="zip"
-                                                    placeholder="Postcode/ZIP" value="<%=addArray[0].pincode%>">
-                                            </div>
-                                            <div class="banner-desc"
-                                                style="margin-left: 15px; margin-top:15px; margin-bottom: 30px;margin-top: 40px; ">
-                                                <a class="button" style="color: #fff; border-radius: 20px;">CHANGE
-                                                    ADDRESS</a>
-                                            </div>
-
-                                         
-
-                                            <div class="banner-desc2"
-                                                style="margin-left: 15px; margin-top:15px; margin-bottom: 30px; ">
-                                                <a class="button" style="color: #fff; border-radius: 20px;">ADD
-                                                    ADDRESS</a>
-                                            </div>
-
-                                     
-
-                                                <div class="col-md-12 form-group" style="display: none;">
-                                                    <div class="creat_account">
-                                                        <h3>Shipping Details</h3>
-                                                        <input type="checkbox" id="f-option3" name="selector">
-                                                        <label for="f-option3">Ship to a different address?</label>
-                                                    </div>
-
-                                                    <textarea class="form-control" name="message" id="message" rows="1"
-                                                        placeholder="Order Notes"></textarea>
-                                                </div>
-
-                                                <% } else { %>
-                                                    <!-- Add Address button when addArray is empty -->
-                                                    <div class="banner-desc2" style="margin-left: 15px; margin-top: 15px; margin-bottom: 30px;">
-                                                        <a class="button" id="addAddressBtn" style="color: #fff; border-radius: 20px;">ADD ADDRESS</a>
-                                                    </div>
-                                                <% } %>
-                                </form>
-                            </div>
-                            <div class="col-lg-4 col-md-6">
-                                <div class="order_box">
-                                    <h2>Your Order</h2>
-                                    <div class="table-responsive">
-                                        <table class="order_table">
-                                            <thead>
-                                                <tr>
-                                                    <th>Product</th>
-                                                    <th>Quantity</th>
-                                                    <th>Total</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <% cart.cartItems.forEach((item)=> { %>
-                                                    <tr>
-                                                        <td>
-                                                            <a href="#" title="<%= item.name %>">
-                                                                <%= item.name %>
-                                                            </a>
-                                                        </td>
-                                                        <td>
-                                                            <span class="middle">
-                                                                <%= item.quantity %>
-                                                            </span>
-                                                        </td>
-                                                        <td>
-                                                            <span class="last">
-                                                                ₹<%= item.total %>
-                                                            </span>
-                                                        </td>
-                                                    </tr>
-                                                    <% }) %>
-                                            </tbody>
-                                        </table>
                                     </div>
-                                    <ul class="list list_2">
-                                        <li><a href="#">Subtotal <span>₹<%= cart.subTotal %></span></a></li>
-                                        <!-- <li><a href="#">Shipping <span>Flat rate: ₹50.00</span></a></li> -->
-                                        <li><a href="#">Discount <span id="couponOffer"></span></a></li>
-                                        <li><a href="#">Total <span id="total">₹<%= cart.subTotal %></span></a></li>
 
-                                        <input type="hidden" name="discountPercentage" id="discountPercentage"
-                                            value="0">
-                                        <input type="hidden" name="discountAmount" id="discountAmount" value="0">
-                                        <input type="hidden" name="total" value="<%= cart.subTotal%>" id="totalVal">
-                                       
-                                    </ul>
-                                 
 
-                                    <div class="payment_item">
-                                        <div>
-                                            <input type="text" id="couponCode" placeholder="Enter Coupon Code"
-                                                name="couponCode" style="margin-bottom: 10px;"><br>
-                                            <button style="border: none;border-radius: 2px;color: white;background-color: #53ca5b;" onclick="applyCoupon('<%= cart.subTotal %>')">Apply</button>
-                                            <button type="button"  style="border: none;border-radius: 2px;color: white;background-color: #ff4444;" onclick="clearCoupon()">Clear Coupon</button>
-                                          
+                                    <div class="col-md-6 form-group p_star">
+                                        <input type="text" placeholder="Phone number" class="form-control" id="number"
+                                            name="number" value="<%=addArray[0].mobileNumber%>">
+                                    </div>
+
+
+                                    <div class="col-md-12 form-group p_star">
+                                        <input type="text" placeholder="Address line " class="form-control" id="add1"
+                                            name="add1" value="<%=addArray[0].address%>">
+                                    </div>
+                                    <div class="col-md-12 form-group p_star">
+                                        <input type="text" placeholder="Locality" class="form-control" id="add2"
+                                            name="add2" value="<%=addArray[0].locality%>">
+                                    </div>
+                                    <div class="col-md-12 form-group p_star">
+                                        <input type="text" placeholder="City" class="form-control" id="city" name="city"
+                                            value="<%=addArray[0].city%>">
+                                    </div>
+                                    <div class="col-md-12 form-group p_star">
+                                        <input type="text" placeholder="State" class="form-control" id="city"
+                                            name="city" value="<%=addArray[0].state%>">
+
+                                    </div>
+                                    <div class="col-md-12 form-group">
+                                        <input type="text" class="form-control" id="zip" name="zip"
+                                            placeholder="Postcode/ZIP" value="<%=addArray[0].pincode%>">
+                                    </div>
+                                    <div class="banner-desc"
+                                        style="margin-left: 15px; margin-top:15px; margin-bottom: 30px;margin-top: 40px; ">
+                                        <a class="button" style="color: #fff; border-radius: 20px;">CHANGE
+                                            ADDRESS</a>
+                                    </div>
+
+
+
+                                    <div class="banner-desc2"
+                                        style="margin-left: 15px; margin-top:15px; margin-bottom: 30px; ">
+                                        <a class="button" style="color: #fff; border-radius: 20px;">ADD
+                                            ADDRESS</a>
+                                    </div>
+
+
+
+                                    <div class="col-md-12 form-group" style="display: none;">
+                                        <div class="creat_account">
+                                            <h3>Shipping Details</h3>
+                                            <input type="checkbox" id="f-option3" name="selector">
+                                            <label for="f-option3">Ship to a different address?</label>
                                         </div>
-                                        <span id="couponErr"></span>
 
+                                        <textarea class="form-control" name="message" id="message" rows="1"
+                                            placeholder="Order Notes"></textarea>
                                     </div>
-                                    <div class="payment_item">
-                                        <div class="radion_btn">
-                                            <input type="radio" id="f-option4" name="paymentOption" value="wallet" >
-                                            <label for="f-option4">Wallet</label>
-                                            <div class="check"></div>
+
+                                    <% } else { %>
+                                        <!-- Add Address button when addArray is empty -->
+                                        <div class="banner-desc2"
+                                            style="margin-left: 15px; margin-top: 15px; margin-bottom: 30px;">
+                                            <a class="button" id="addAddressBtn"
+                                                style="color: #fff; border-radius: 20px;">ADD ADDRESS</a>
                                         </div>
-                                        <p>Pay  amount from your wallet  <br> Available Balance is <%=user.wallet%> </p>
-                                    
+                                        <% } %>
+            </form>
+            </div>
+            <div class="col-lg-4 col-md-6">
+                <div class="order_box">
+                    <h2>Your Order</h2>
+                    <div class="table-responsive">
+                        <table class="order_table">
+                            <thead>
+                                <tr>
+                                    <th>Product</th>
+                                    <th>Quantity</th>
+                                    <th>Total</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% cart.cartItems.forEach((item)=> { %>
+                                    <tr>
+                                        <td>
+                                            <a href="#" title="<%= item.name %>">
+                                                <%= item.name %>
+                                            </a>
+                                        </td>
+                                        <td>
+                                            <span class="middle">
+                                                <%= item.quantity %>
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <span class="last">
+                                                ₹<%= item.total %>
+                                            </span>
+                                        </td>
+                                    </tr>
+                                    <% }) %>
+                            </tbody>
+                        </table>
+                    </div>
+                    <ul class="list list_2">
+                        <li><a href="#">Subtotal <span>₹<%= cart.subTotal %></span></a></li>
+                        <!-- <li><a href="#">Shipping <span>Flat rate: ₹50.00</span></a></li> -->
+                        <li><a href="#">Discount <span id="couponOffer"></span></a></li>
+                        <li><a href="#">Total <span id="total">₹<%= cart.subTotal %></span></a></li>
 
-                                    </div>
-        
-                                    <div class="payment_item">
-                                        <div class="radion_btn">
-                                            <input type="radio" checked id="f-option5" name="paymentOption" value="cod">
-                                            <label for="f-option5">Cash On Delivery</label>
-                                            <div class="check"></div>
-                                        </div>
-                                        <p>Pay the amount at your doorstep</p>
-                                    </div>
-                                    <div class="payment_item active">
-                                        <div class="radion_btn">
-                                            <input type="radio" id="f-option6" name="paymentOption" value="razorpay">
-                                            <label for="f-option6">Razorpay </label>
-                                            <img src="../user-asset/img/product/card.jpg" alt="">
-                                            <div class="check"></div>
-                                        </div>
-                                        <p>Pay via Razorpay ; you can pay with your credit card if you don’t have a
-                                            Razorpay
-                                            account.</p>
-                                    </div>
+                        <input type="hidden" name="discountPercentage" id="discountPercentage" value="0">
+                        <input type="hidden" name="discountAmount" id="discountAmount" value="0">
+                        <input type="hidden" name="total" value="<%= cart.subTotal%>" id="totalVal">
 
-                                    <div class="creat_account">
-                                        <!-- Rest of the code for the creat_account section -->
-                                    </div>
-                                    <button class="primary-btn" onclick=" proceedToPayment()" href="#">Confirm
-                                        Order</button>
-                                </div>
-                            </div>
+                    </ul>
 
 
+                    <div class="payment_item">
+                        <div>
+                            <input type="text" id="couponCode" placeholder="Enter Coupon Code" name="couponCode"
+                                style="margin-bottom: 10px;"><br>
+                            <button style="border: none;border-radius: 2px;color: white;background-color: #53ca5b;"
+                                onclick="applyCoupon('<%= cart.subTotal %>')">Apply</button>
+                            <button type="button"
+                                style="border: none;border-radius: 2px;color: white;background-color: #ff4444;"
+                                onclick="clearCoupon()">Clear Coupon</button>
 
                         </div>
+                        <span id="couponErr"></span>
+
                     </div>
+                    <div class="payment_item">
+                        <div class="radion_btn">
+                            <input type="radio" id="f-option4" name="paymentOption" value="wallet">
+                            <label for="f-option4">Wallet</label>
+                            <div class="check"></div>
+                        </div>
+                        <p>Pay amount from your wallet <br> Available Balance is <%=user.wallet%>
+                        </p>
+
+
+                    </div>
+
+                    <div class="payment_item">
+                        <div class="radion_btn">
+                            <input type="radio" checked id="f-option5" name="paymentOption" value="cod">
+                            <label for="f-option5">Cash On Delivery</label>
+                            <div class="check"></div>
+                        </div>
+                        <p>Pay the amount at your doorstep</p>
+                    </div>
+                    <div class="payment_item active">
+                        <div class="radion_btn">
+                            <input type="radio" id="f-option6" name="paymentOption" value="razorpay">
+                            <label for="f-option6">Razorpay </label>
+                            <img src="../user-asset/img/product/card.jpg" alt="">
+                            <div class="check"></div>
+                        </div>
+                        <p>Pay via Razorpay ; you can pay with your credit card if you don’t have a
+                            Razorpay
+                            account.</p>
+                    </div>
+
+                    <div class="creat_account">
+                        <!-- Rest of the code for the creat_account section -->
+                    </div>
+                    <button class="primary-btn" onclick=" proceedToPayment()" href="#">Confirm
+                        Order</button>
                 </div>
+            </div>
+
+
+
+            </div>
+            </div>
+            </div>
 
             </form>
 
@@ -426,7 +431,7 @@
                             </div>
                         </div>
                     </div>
-                
+
                     <div class="col-lg-2 col-md-6 col-sm-6">
                         <div class="single-footer-widget">
                             <h6>Follow Us</h6>
@@ -440,7 +445,7 @@
                         </div>
                     </div>
                 </div>
-              
+
             </div>
 
 
@@ -506,7 +511,7 @@
                         <input type="text" name="name" id="name" required>
 
                         <label for="mobile">Mobile:</label>
-                        <input type="text" name="mno" id="mobile"  required>
+                        <input type="text" name="mno" id="mobile" required>
 
                         <label for="address">Address:</label>
                         <input type="text" name="address" id="address" required>
@@ -536,7 +541,7 @@
 
 
 
-       
+
 
 
 
@@ -583,37 +588,37 @@
             $(document).ready(function () {
                 $('#addressForm2').submit(function (event) {
                     event.preventDefault(); // Prevent form submission
-        
+
                     // Validate form fields
                     const name = $('#name').val().trim();
                     const mobile = $('#mobile').val().trim();
                     const pincode = $('#pincode').val().trim();
                     const city = $('#city').val().trim();
                     const state = $('#state').val().trim();
-        
+
                     // Check if fields are empty
                     if (!name || !mobile || !pincode || !city || !state) {
                         $('#responseMessage').text('All fields are required.');
                         return;
                     }
-        
+
                     // Check if name contains any numbers
                     if (/\d/.test(name)) {
                         $('#responseMessage').text('Name should not contain numbers.');
                         return;
                     }
-        
+
                     // Check if mobile and pincode contain characters
                     if (!/^\+?\d+$/.test(mobile)) {
                         $('#responseMessage').text('Mobile should only contain numbers.');
                         return;
                     }
-        
+
                     if (!/^\d+$/.test(pincode)) {
                         $('#responseMessage').text('Pincode should only contain numbers.');
                         return;
                     }
-        
+
                     // Send AJAX request
                     $.ajax({
                         url: $(this).attr('action'),
@@ -638,7 +643,7 @@
                 });
             });
         </script>
-        
+
 
 
 
@@ -679,42 +684,42 @@
             // Get all popup elements and overlays
             var popups = document.querySelectorAll(".pop-up-list");
             var overlays = document.querySelectorAll(".overlay-pop-up");
-            
+
             // Get all buttons and close buttons
             var buttons = document.querySelectorAll(".button");
             var closes = document.querySelectorAll(".pop-up-button");
-            
+
             // Function to open popup and overlay
             function openPopup(popup, overlay) {
-              popup.style.display = "block";
-              overlay.style.display = "block";
+                popup.style.display = "block";
+                overlay.style.display = "block";
             }
-            
+
             // Function to close popup and overlay
             function closePopup(popup, overlay) {
-              popup.style.display = "none";
-              overlay.style.display = "none";
+                popup.style.display = "none";
+                overlay.style.display = "none";
             }
-            
+
             // Add event listeners to each button to open the respective popup
             buttons.forEach(function (button, index) {
-              button.onclick = function () {
-                openPopup(popups[index], overlays[index]);
-              };
+                button.onclick = function () {
+                    openPopup(popups[index], overlays[index]);
+                };
             });
-            
+
             // Add event listeners to each overlay to close the respective popup
             overlays.forEach(function (overlay, index) {
-              overlay.onclick = function () {
-                closePopup(popups[index], overlay);
-              };
+                overlay.onclick = function () {
+                    closePopup(popups[index], overlay);
+                };
             });
-            
+
             // Add event listeners to each close button to close the respective popup
             closes.forEach(function (close, index) {
-              close.onclick = function () {
-                closePopup(popups[index], overlays[index]);
-              };
+                close.onclick = function () {
+                    closePopup(popups[index], overlays[index]);
+                };
             });
 
 
@@ -729,8 +734,8 @@
                 // Open the existing popup when clicked
                 openPopup(popups[1], overlays[1]);
             };
-          </script>
-          
+        </script>
+
 
 
         <script>
@@ -752,7 +757,7 @@
                                 icon: 'error',
                                 timer: 5000
                             })
-                        } else if (response.codStatus == true ||  response.orderStatus== true ) {
+                        } else if (response.codStatus == true || response.orderStatus == true) {
                             console.log("res" + response.codStatus)
                             console.log(response, 'status');
                             Swal.fire({
@@ -771,37 +776,18 @@
                                     location.href = '/home';
                                 }
                             });
-
                         } else if (response.order.status === "created") {
-
-
-                          
                             console.log(response.order);
-
                             rezorpayPayment(response.order)
-
                         }
-
-
-
-
                     }
                 })
             }
 
             function rezorpayPayment(order) {
-
                 console.log("here", order.amount);
-
-
-
-
                 console.log("rezorpayPayment");
-
-
                 var options = {
-
-
                     "key": "rzp_test_ujleQwkkyHB5vp", // Enter the Key ID generated from the Dashboard
                     "amount": order.amount * 100, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
                     "currency": "INR",
@@ -813,23 +799,14 @@
                         // alert(response.razorpay_payment_id);
                         // alert(response.razorpay_order_id);
                         // alert(response.razorpay_signature)
-
-
-
                         verifyPayment(response, order)
                     },
-
                     "modal": {
-                        "ondismiss": function() {
+                        "ondismiss": function () {
                             console.log('Payment window closed');
                             paymentFailed(order);
                         }
-                        },
-
-
-
-
-
+                    },
                     "prefill": {
                         "name": "Gaurav Kumar",
                         "email": "gaurav.kumar@example.com",
@@ -854,24 +831,17 @@
                     alert(response.error.metadata.payment_id);
                 });
                 rzp1.open();
-
-
-
             }
-
-
             function verifyPayment(payment, order) {
-
-                console.log("iam here");
+                console.log("I am here");
                 $.ajax({
                     url: "/verifyPayment",
                     data: {
-                        payment,
-                        order
+                        payment: payment,
+                        order: order
                     },
                     method: "post",
-                    success: (response) => {
-
+                    success: function(response) {
                         if (response.status) {
                             Swal.fire({
                                 title: 'Order Placed!',
@@ -882,7 +852,7 @@
                                 cancelButtonColor: '#d33',
                                 confirmButtonText: 'View Order',
                                 cancelButtonText: 'Continue Shopping'
-                            }).then((result) => {
+                            }).then(function(result) {
                                 if (result.isConfirmed) {
                                     location.href = '/orderSlip';
                                 } else {
@@ -890,49 +860,49 @@
                                 }
                             });
                         } else {
-                            alert("payment failed")
+                            alert("Payment failed");
                         }
-
+                    },
+                    error: function() {
+                        alert("An error occurred while processing your request.");
                     }
-
-                })
+                });
             }
-
         </script>
 
 
 
-           <!-- payment failed -->
+        <!-- payment failed -->
 
-           <script>
+        <script>
             function paymentFailed(order) {
-    $.ajax({
-      url: 'paymentFailed',
-      method: 'post',
-      data: {
-        order,
-      },
-       
-      success: (response) => {
-        if (response.status) {
-          Swal.fire({
-            title: 'Order Failed!',
-            text: 'Your order is failed.',
-            icon: 'error',
-            timer: 5000
-          }).then(() => {
-            location.href = '/shop'
-          })
-        } else {
+                $.ajax({
+                    url: 'paymentFailed',
+                    method: 'post',
+                    data: {
+                        order,
+                    },
 
-        }
+                    success: (response) => {
+                        if (response.status) {
+                            Swal.fire({
+                                title: 'Order Failed!',
+                                text: 'Your order is failed.',
+                                icon: 'error',
+                                timer: 5000
+                            }).then(() => {
+                                location.href = '/shop'
+                            })
+                        } else {
 
-      }
-    })
-  }
-           </script>
+                        }
 
-           
+                    }
+                })
+            }
+        </script>
+
+
 
 
         <!-- //coupon -->
@@ -957,12 +927,12 @@
                         if (response.status == true) {
 
                             $.ajax({
-                        
-                                url: '/applyCoupon/' ,
+
+                                url: '/applyCoupon/',
                                 method: 'GET',
-                                data:{
-                                    couponCode:couponCode,
-                                    subTotal:total
+                                data: {
+                                    couponCode: couponCode,
+                                    subTotal: total
 
                                 },
                                 success: (response) => {
@@ -1003,27 +973,27 @@
             // clear coupon
 
             function clearCoupon() {
-        document.getElementById("couponCode").value = ""; 
-        document.getElementById("total").innerText = "₹" + <%= cart.subTotal %>;
-        document.getElementById("couponOffer").innerText = "";
-
-        
-        document.getElementById("couponErr").innerText = "";
+                document.getElementById("couponCode").value = "";
+                document.getElementById("total").innerText = "₹" + <%= cart.subTotal %>;
+                document.getElementById("couponOffer").innerText = "";
 
 
-
-     
-    }
+                document.getElementById("couponErr").innerText = "";
 
 
+
+
+            }
 
 
 
 
 
 
-    
-</script>
+
+
+
+        </script>
 
 
 
@@ -1037,12 +1007,12 @@
 
         <!-- address form validation -->
 
-        
-        
-        
-        
-        
-        
+
+
+
+
+
+
 
 
 
